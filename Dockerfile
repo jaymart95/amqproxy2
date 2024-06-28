@@ -1,12 +1,13 @@
-# Stage 1: Build the AMQProxy binary
 FROM 84codes/crystal:latest-alpine AS builder
 WORKDIR /tmp
-COPY amqproxy/shard.yml amqproxy/shard.lock ./
+COPY shard.yml shard.lock ./
 RUN shards install --production
-COPY amqproxy/src/ src/
+COPY src/ src/
+
 RUN shards build --production --release
 
-# Stage 2: Create the runtime image
+FROM alpine:3.18
+RUN apk add --no-cache libssl1.1 pcre2 libevent libgcc \
 FROM alpine:latest
 RUN apk add --no-cache libssl3 pcre2 libevent libgcc \
     && addgroup --gid 1000 amqpproxy \
@@ -14,4 +15,4 @@ RUN apk add --no-cache libssl3 pcre2 libevent libgcc \
 COPY --from=builder /tmp/bin/amqproxy /usr/bin/amqproxy
 USER 1000:1000
 EXPOSE 5672
-ENTRYPOINT ["/usr/bin/amqproxy", "--config=/amqproxy/amqproxy.conf
+ENTRYPOINT ["/usr/bin/amqproxy", "--config=/amqproxy/amqproxy.conf"]
