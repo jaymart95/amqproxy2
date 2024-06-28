@@ -12,4 +12,4 @@ RUN apk add --no-cache libssl3 pcre2 libevent libgcc \
 COPY --from=builder /tmp/bin/amqproxy /usr/bin/amqproxy
 USER 1000:1000
 EXPOSE 5672
-ENTRYPOINT ["/usr/bin/amqproxy", "--config=/amqproxy/amqproxy.conf"]
+ENTRYPOINT ["/usr/bin/amqproxy", "--config=amqproxy.conf"]
