@@ -2,7 +2,7 @@ FROM 84codes/crystal:latest-alpine AS builder
 WORKDIR /tmp
 COPY shard.yml shard.lock ./
 RUN shards install --production
-COPY src/ src/
+COPY . src/
 RUN shards build --production --release
 
 FROM alpine:latest
