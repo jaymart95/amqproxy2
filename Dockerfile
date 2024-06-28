@@ -3,11 +3,8 @@ WORKDIR /tmp
 COPY shard.yml shard.lock ./
 RUN shards install --production
 COPY src/ src/
-
 RUN shards build --production --release
 
-FROM alpine:3.18
-RUN apk add --no-cache libssl1.1 pcre2 libevent libgcc \
 FROM alpine:latest
 RUN apk add --no-cache libssl3 pcre2 libevent libgcc \
     && addgroup --gid 1000 amqpproxy \
